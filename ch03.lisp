@@ -92,3 +92,21 @@
 (defun nthmost (n lst)
   (nth (- n 1)
        (sort (copy-list lst) #'>)))
+
+(defun our-reverse (lst)
+  (let ((acc nil))
+    (dolist (elt lst)
+      (push elt acc))
+    acc))
+
+(defun proper-list? (x)
+  (or (null x)
+      (and (consp x)
+           (proper-list? (cdr x)))))
+
+(defun our-assoc (key alist)
+  (and (consp alist)
+       (let ((pair (car alist)))
+         (if (eql key (car pair))
+             pair
+             (our-assoc key (cdr alist))))))
