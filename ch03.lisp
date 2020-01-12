@@ -110,3 +110,44 @@
          (if (eql key (car pair))
              pair
              (our-assoc key (cdr alist))))))
+
+(defun shortest-path (start end net)
+  (bfs end (list (list start)) net))
+
+(defun bfs (end queue net)
+  (if (null queue)
+      nil
+      (let ((path (car queue)))
+        (let ((node (car path)))
+          (if (eql node end)
+              (reverse path)
+              (bfs end
+                   (append (cdr queue)
+                           (new-paths path node net))
+                   net))))))
+
+(defun new-paths (path node net)
+  (mapcar #'(lambda (n)
+              (cons n path))
+          (cdr (assoc node net))))
+
+;; Exercises
+
+(defun new-union (lst1 lst2)
+  (let ((lst (reverse lst1)))
+    (dolist (elt lst2)
+      (if (not (member elt lst))
+          (push elt lst)))
+    (reverse lst)))
+
+(defun occurrences (lst)
+  (let ((l nil))
+    (dolist (elt (remove-duplicates lst))
+      (push (cons elt (count elt lst)) l))
+    l))
+
+(defun pos+ (lst)
+  (let ((pos-lst nil))
+    (dolist (elt lst)
+      (push (+ elt (position elt lst)) pos-lst))
+    (reverse pos-lst)))
